@@ -13,8 +13,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.demo.model.Gps;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class GpsServiceTest {
 	@Autowired
     GpsService gpsService;

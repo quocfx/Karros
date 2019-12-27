@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -21,9 +22,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.example.demo.model.Gps;
 import com.example.demo.service.GpsService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class GpsControllerTest {
 	@Autowired
 	private WebApplicationContext webApplicationContext;
@@ -65,25 +67,30 @@ public class GpsControllerTest {
 	*/		
 	@Test
 	public void testGetGpsByIdRequest() throws Exception {
-		// Test setup
-		// Insert new item to ensure we have at least one  item in db and get its id
-		// It is better to use mock data from mock test framework but just leave it for now
-//		Gps newGps = new Gps(mockMetaData, mockWaypoint, mockTrack);
-//		gpsService.saveOrUpdate(newGps);
-//		// Get the latest item
-//		List<Gps> myResult = gpsService.getAllGps();
-//		assertTrue(myResult.size() > 0);
-//		// Get the latest one (could be any item in db)
-//		Gps newItem = myResult.get(myResult.size() - 1);
-//		int 
-		
-		
-		
-		// Main test
+		// Main test for add new item REST
 		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-		MockHttpServletRequestBuilder builder = get(url).accept(MediaType.APPLICATION_JSON);
+		Gps newGps = new Gps(mockMetaData, mockWaypoint, mockTrack);
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonStr = mapper.writeValueAsString(newGps);			
+		MockHttpServletRequestBuilder builder = post(url)
+				.content(jsonStr)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON);
 		ResultActions ra = mockMvc.perform(builder);
 		ra.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+		
+		// Get the latest gps item after previous call
+		List<Gps> myResult = gpsService.getAllGps();
+		assertTrue(myResult.size() > 0);
+		// Get the latest one (could be any item in db)
+		Gps newItem = myResult.get(myResult.size() - 1);
+		int newId = newItem.getId();
+		
+		// Main test for get item by Id REST		
+		String myUrl = url + "/" + newId;
+		builder = get(myUrl).accept(MediaType.APPLICATION_JSON);
+		ra = mockMvc.perform(builder);
+		ra.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+		// TODO: The result should be verified also but let's leave it for now
 	}
-
 }
