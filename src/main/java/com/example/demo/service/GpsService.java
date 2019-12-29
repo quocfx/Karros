@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Gps;
-import com.example.demo.model.Metadata;
 import com.example.demo.repository.GpsRepository;
 
 @Service
@@ -27,23 +26,8 @@ public class GpsService {
     }
 	
 	public void saveOrUpdate(Gps gps) {
-//		String mockMetaData = "mock metada";
-//		String mockWaypoint = "mock waypoint";
-//		String mockTrack = "mock track";
-//		Gps newGps = new Gps(mockMetaData, mockWaypoint, mockTrack);
-		
-//		Metadata metadata = new Metadata();
-//		metadata.setName("my meta name");
-//		metadata.setGps(newGps);
-//		
-//		newGps.getMetadata()
-		
-		
+		// TODO: this one should be executed only when create new gps
 		gps.setCreatedDate(new Date());
 		gpsRepository.save(gps);
-    }
-	
-	public void delete(int id) {
-		gpsRepository.deleteById(id);
     }
 }

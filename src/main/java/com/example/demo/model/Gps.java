@@ -1,90 +1,43 @@
 package com.example.demo.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Gps {
 	@Id
     @GeneratedValue
     private int id;
-    private String metadata;
-	private String waypoint;
-    private String track;
-    
     
     // Metadata
     private String name;
     @Column(length=5000)
 	private String desc;
-	// It is better a link object
+    private String author;
+	// It could be better if use link object
 	private String linkUrl;
 	private String linkText;
 	private Date createdDate;
+	
+	// Waypoint
+	@OneToMany(mappedBy = "gps", cascade = CascadeType.ALL)
+	private List<Waypoint> waypoints;
+	
+	// Track
+	@OneToMany(mappedBy = "gps", cascade = CascadeType.ALL)
+	private List<Track> tracks;
     
     /**
 	 * Default constructor for Gps
 	 */
     public Gps() {
-	}
-    
-    /**
-	 * Constructor for Gps
-	 */
-    public Gps(String metadata, String waypoint, String track) {
-		this.metadata = metadata;
-		this.waypoint = waypoint;
-		this.track = track;
-	}
-    
-    /**
-	 * @return the metadata
-	 */
-	public String getMetadata() {
-		return metadata;
-	}
-
-	/**
-	 * @param metadata the metadata to set
-	 */
-	public void setMetadata(String metadata) {
-		this.metadata = metadata;
-	}
-
-	/**
-	 * @return the waypoint
-	 */
-	public String getWaypoint() {
-		return waypoint;
-	}
-
-	/**
-	 * @param waypoint the waypoint to set
-	 */
-	public void setWaypoint(String waypoint) {
-		this.waypoint = waypoint;
-	}
-
-	/**
-	 * @return the track
-	 */
-	public String getTrack() {
-		return track;
-	}
-
-	/**
-	 * @param track the track to set
-	 */
-	public void setTrack(String track) {
-		this.track = track;
 	}
     
     /**
@@ -162,5 +115,47 @@ public class Gps {
 	 */
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	/**
+	 * @return the author
+	 */
+	public String getAuthor() {
+		return author;
+	}
+
+	/**
+	 * @param author the author to set
+	 */
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	/**
+	 * @return the waypoints
+	 */
+	public List<Waypoint> getWaypoints() {
+		return waypoints;
+	}
+
+	/**
+	 * @param waypoints the waypoints to set
+	 */
+	public void setWaypoints(List<Waypoint> waypoints) {
+		this.waypoints = waypoints;
+	}
+
+	/**
+	 * @return the tracks
+	 */
+	public List<Track> getTracks() {
+		return tracks;
+	}
+
+	/**
+	 * @param tracks the tracks to set
+	 */
+	public void setTracks(List<Track> tracks) {
+		this.tracks = tracks;
 	}
 }

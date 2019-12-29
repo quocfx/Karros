@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,10 +21,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.example.demo.model.Gps;
 import com.example.demo.service.GpsService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class GpsControllerTest {
 	@Autowired
 	private WebApplicationContext webApplicationContext;
@@ -33,12 +31,7 @@ public class GpsControllerTest {
 	@Autowired
     GpsService gpsService;
 	
-	private final String url = "http://localhost:9080/gps";
-	
-	// Mock Gps data
-	String mockMetaData = "mock metada";
-	String mockWaypoint = "mock waypoint";
-	String mockTrack = "mock track";
+	private final String URL = "http://localhost:9080/gps";
 	
 	/*
 	 * Test the contenxt is loaded
@@ -55,7 +48,7 @@ public class GpsControllerTest {
 	@Test
 	public void testGetAllGpsRequest() throws Exception {
 		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-		MockHttpServletRequestBuilder builder = get(url).accept(MediaType.APPLICATION_JSON);
+		MockHttpServletRequestBuilder builder = get(URL).accept(MediaType.APPLICATION_JSON);
 		ResultActions ra = mockMvc.perform(builder);
 		ra.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
 	}
@@ -67,17 +60,20 @@ public class GpsControllerTest {
 	*/		
 	@Test
 	public void testGetGpsByIdRequest() throws Exception {
-		// Main test for add new item REST
-		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-		Gps newGps = new Gps(mockMetaData, mockWaypoint, mockTrack);
-		ObjectMapper mapper = new ObjectMapper();
-		String jsonStr = mapper.writeValueAsString(newGps);			
-		MockHttpServletRequestBuilder builder = post(url)
-				.content(jsonStr)
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON);
-		ResultActions ra = mockMvc.perform(builder);
-		ra.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+		// Prepare a test item and insert it
+		// TODO: Duplicate code of GpsServiceTest class. Should be provided by an utility class for test Gps item
+		String testName = "test name";
+		String testDesc = "test desc";
+		String testAuthor = "test author";
+		String testLinkUrl = "test link URL";
+		String testLinkText = "test link text";
+		Gps newGps = new Gps();
+		newGps.setName(testName);
+		newGps.setDesc(testDesc);
+		newGps.setAuthor(testAuthor);
+		newGps.setLinkUrl(testLinkUrl);
+		newGps.setLinkText(testLinkText);
+		gpsService.saveOrUpdate(newGps);
 		
 		// Get the latest gps item after previous call
 		List<Gps> myResult = gpsService.getAllGps();
@@ -87,9 +83,10 @@ public class GpsControllerTest {
 		int newId = newItem.getId();
 		
 		// Main test for get item by Id REST		
-		String myUrl = url + "/" + newId;
-		builder = get(myUrl).accept(MediaType.APPLICATION_JSON);
-		ra = mockMvc.perform(builder);
+		String myUrl = URL + "/" + newId;
+		MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+		MockHttpServletRequestBuilder builder = get(myUrl).accept(MediaType.APPLICATION_JSON);
+		ResultActions ra = mockMvc.perform(builder);
 		ra.andExpect(status().isOk()).andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
 		// TODO: The result should be verified also but let's leave it for now
 	}

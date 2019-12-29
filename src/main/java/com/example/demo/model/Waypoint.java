@@ -10,98 +10,82 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Metadata {
-	
+public class Waypoint {
 	@Id
     @GeneratedValue
     private int id;
+	
 	private String name;
-	private String desc;
-	// It is better a link object
-	private String linkUrl;
-	private String linkText;
-	private String time;
+	private String sym;
+	private String lat;
+	private String lon;
 	
 	@ManyToOne (fetch = FetchType.LAZY, optional = false)
 	@JoinColumn (name = "gps_id", nullable = false)
 	@JsonIgnore
 	private Gps gps;
-	
+
 	/**
 	 * @return the id
 	 */
 	public int getId() {
 		return id;
 	}
-	
+
 	/**
 	 * @return the name
 	 */
 	public String getName() {
 		return name;
 	}
-	
+
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	/**
-	 * @return the desc
+	 * @return the sym
 	 */
-	public String getDesc() {
-		return desc;
+	public String getSym() {
+		return sym;
 	}
-	
+
 	/**
-	 * @param desc the desc to set
+	 * @param sym the sym to set
 	 */
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setSym(String sym) {
+		this.sym = sym;
 	}
-	
+
 	/**
-	 * @return the linkUrl
+	 * @return the lat
 	 */
-	public String getLinkUrl() {
-		return linkUrl;
+	public String getLat() {
+		return lat;
 	}
-	
+
 	/**
-	 * @param linkUrl the linkUrl to set
+	 * @param lat the lat to set
 	 */
-	public void setLinkUrl(String linkUrl) {
-		this.linkUrl = linkUrl;
+	public void setLat(String lat) {
+		this.lat = lat;
 	}
-	
+
 	/**
-	 * @return the linkText
+	 * @return the lon
 	 */
-	public String getLinkText() {
-		return linkText;
+	public String getLon() {
+		return lon;
 	}
-	
+
 	/**
-	 * @param linkText the linkText to set
+	 * @param lon the lon to set
 	 */
-	public void setLinkText(String linkText) {
-		this.linkText = linkText;
-	}
-	
-	/**
-	 * @return the time
-	 */
-	public String getTime() {
-		return time;
-	}
-	
-	/**
-	 * @param time the time to set
-	 */
-	public void setTime(String time) {
-		this.time = time;
+	public void setLon(String lon) {
+		this.lon = lon;
 	}
 
 	/**
@@ -116,5 +100,6 @@ public class Metadata {
 	 */
 	public void setGps(Gps gps) {
 		this.gps = gps;
-	}	
+	}
+
 }

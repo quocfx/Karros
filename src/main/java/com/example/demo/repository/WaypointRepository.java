@@ -5,9 +5,9 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.model.Metadata;
+import com.example.demo.model.Waypoint;
 
 @Repository
-public interface MetadataRepository extends CrudRepository<Metadata, Integer> {
-	Optional<Metadata> findByIdAndGpsId(int id, int GpsId);
+public interface WaypointRepository extends CrudRepository<Waypoint, Integer> {
+	Optional<Waypoint> findByIdAndGpsId(int id, int GpsId);
 }

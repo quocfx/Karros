@@ -13,14 +13,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.demo.model.Gps;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class GpsServiceTest {
 	@Autowired
     GpsService gpsService;
 	
 	/*
 	 * Test getAllService, insert new item to service, and find by service id
+	 * It will be better if use some mock test framework here but just leave it for formal project
 	 */
 	@Test
 	public void testGetAllInsertFind() {
@@ -28,27 +29,36 @@ public class GpsServiceTest {
 		List<Gps> myResult = gpsService.getAllGps();
 		assertTrue(myResult.size() == 0);
 		
-		// Prepare a mock item and insert it
-		String mockMetaData = "mock metada";
-		String mockWaypoint = "mock waypoint";
-		String mockTrack = "mock track";
-		Gps newGps = new Gps(mockMetaData, mockWaypoint, mockTrack);
+		// Prepare a test item and insert it
+		String testName = "test name";
+		String testDesc = "test desc";
+		String testAuthor = "test author";
+		String testLinkUrl = "test link URL";
+		String testLinkText = "test link text";
+		Gps newGps = new Gps();
+		newGps.setName(testName);
+		newGps.setDesc(testDesc);
+		newGps.setAuthor(testAuthor);
+		newGps.setLinkUrl(testLinkUrl);
+		newGps.setLinkText(testLinkText);
 		gpsService.saveOrUpdate(newGps);
 		
 		// Ensure the new item is added
 		myResult = gpsService.getAllGps();
 		assertTrue(myResult.size() == 1);
 		Gps newItem = myResult.get(0);
-		assertEquals(mockMetaData, newItem.getMetadata());
-		assertEquals(mockWaypoint, newItem.getWaypoint());
-		assertEquals(mockTrack, newItem.getTrack());
+		assertEquals(testName, newItem.getName());
+		assertEquals(testDesc, newItem.getDesc());
+		assertEquals(testAuthor, newItem.getAuthor());
 		
 		// Get new item id and test search by id
 		int newId = newItem.getId();
 		Gps resultItem = gpsService.getGpsById(newId);
-		assertEquals(mockMetaData, resultItem.getMetadata());
-		assertEquals(mockWaypoint, resultItem.getWaypoint());
-		assertEquals(mockTrack, resultItem.getTrack());
+		assertEquals(testName, resultItem.getName());
+		assertEquals(testDesc, resultItem.getDesc());
+		assertEquals(testAuthor, resultItem.getAuthor());
+		assertEquals(testLinkUrl, resultItem.getLinkUrl());
+		assertEquals(testLinkText, resultItem.getLinkText());
 	}
 
 }
